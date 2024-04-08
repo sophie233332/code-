@@ -7,20 +7,29 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public abstract class hardwareprobablyidk extends OpMode{
+public class hardwareprobablyidk extends OpMode{
 
-    // mi front, m2 right, m3 back, m4 left
+    // m1 front, m2 right, m3 back, m4 left declare DcMotor variable
 
     DcMotor m1Front = null;
     DcMotor m2Right = null;
     DcMotor m3Back = null;
     DcMotor m4Left = null;
+
+    // decare HardwareMap variable
     HardwareMap hwMap = null;
+
+    // declare variable for ElapsedTime
+
+    // period, private variable
     private ElapsedTime period = new ElapsedTime();
 
-    public hardwareprobablyidk(){
+    public hardwareprobablyidk(HardwareMap hardwareMap){
+        hwMap = hardwareMap;
 
     }
+
+// initialization
     public void init(){
 
         m1Front = hwMap.dcMotor.get("m1");
@@ -44,22 +53,26 @@ public abstract class hardwareprobablyidk extends OpMode{
 }
 
 
-//teleop part
 
+
+
+
+
+
+//teleop part
 
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import java.lang.Math;
 
 
-@TeleOp(name="Testbot: Telop ", group="Testbot")
+@TeleOp(name="Testbot: Test botTeleop ", group="Testbot")
 
-public abstract class K9botTeleopTank_Linear extends LinearOpMode {
+public class TestbotTeleop extends LinearOpMode {
 
-
-    /* Declare OpMode members. */
     hardwareprobablyidk  robot = new hardwareprobablyidk();
 
 
@@ -72,7 +85,7 @@ public abstract class K9botTeleopTank_Linear extends LinearOpMode {
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-        robot.init(HardwareMap);
+        robot.init();
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -92,10 +105,9 @@ public abstract class K9botTeleopTank_Linear extends LinearOpMode {
                 robot.m3Back.setPower(spinpower);
                 robot.m4Left.setPower(spinpower);
             }
-            else {
+            else { // drive normally
 
 
-                // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
                 frontbackpower = -gamepad1.left_stick_y;
                 leftrightpower = -gamepad1.left_stick_x;
                 
@@ -103,10 +115,10 @@ public abstract class K9botTeleopTank_Linear extends LinearOpMode {
                 telemetry.addData("y", "%.2f", -gamepad1.left_stick_y);
 
                 
-                robot.m1Front.setPower(leftrightpower);
-                robot.m2Right.setPower(frontbackpower);
-                robot.m3Back.setPower(leftrightpower);
-                robot.m4Left.setPower(frontbackpower);
+                robot.m1Front.setPower(leftrightpower); // m1,m3 drive left and right
+                robot.m2Right.setPower(frontbackpower); // m2,m4 drive back and forward
+                robot.m3Back.setPower(-leftrightpower); // opposite m1 m2, face opposite direction
+                robot.m4Left.setPower(-frontbackpower);
 
             }
 
@@ -116,4 +128,27 @@ public abstract class K9botTeleopTank_Linear extends LinearOpMode {
             sleep(40);
         }
     }
+}
+
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+        float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+		float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+		float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+		float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 }
